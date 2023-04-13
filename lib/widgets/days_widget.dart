@@ -243,8 +243,7 @@ class DaysWidget extends StatelessWidget {
               values.day.isSameDay(values.selectedMinDate!)) ||
           (values.selectedMaxDate != null &&
               values.day.isSameDay(values.selectedMaxDate!))) {
-        bgColor =
-            selectedBackgroundColor ?? Theme.of(context).colorScheme.primary;
+        bgColor = selectedBackgroundColorBetween ?? Theme.of(context).colorScheme.primary;
         txtStyle =
             (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
           color: selectedBackgroundColor != null
@@ -301,11 +300,25 @@ class DaysWidget extends StatelessWidget {
         color: bgColor,
         borderRadius: borderRadius,
       ),
-      child: Text(
-        values.text,
-        textAlign: TextAlign.center,
-        style: txtStyle,
-      ),
+      child: Stack(
+      alignment: Alignment.center,
+      children: [
+        values.isSelected &&
+            (values.selectedMinDate != null &&
+                values.day.isSameDay(values.selectedMinDate!)) ||
+            (values.selectedMaxDate != null &&
+                values.day.isSameDay(values.selectedMaxDate!)) ? Container(alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: selectedBackgroundColor,
+              borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
+            )) : const SizedBox.shrink(),
+        Text(
+          values.text,
+          textAlign: TextAlign.center,
+          // style: txtStyle,
+          style: TextStyle(color: values.day.weekday == 6 ? Colors.blue : values.day.weekday == 7 ? Colors.red : values.day.isSameDay(values.selectedMinDate?? DateTime(2000)) ? Colors.white : values.day.isSameDay(values.selectedMaxDate?? DateTime(2000)) ? Colors.white : Colors.black),
+        ),],
+      )
     );
   }
 }

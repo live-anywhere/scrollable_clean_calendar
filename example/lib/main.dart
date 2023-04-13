@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     // readOnly: true,
     onPreviousMinDateTapped: (date) {},
     onAfterMaxDateTapped: (date) {},
-    weekdayStart: DateTime.monday,
+    weekdayStart: DateTime.sunday,
     // initialFocusDate: DateTime(2023, 5),
     // initialDateSelected: DateTime(2022, 3, 15),
     // endDateSelected: DateTime(2022, 3, 20),
@@ -62,9 +62,26 @@ class MyApp extends StatelessWidget {
         //   },
         // ),
         body: ScrollableCleanCalendar(
+          locale: 'ko',
           calendarController: calendarController,
+          showWeekdays: false,
           layout: Layout.BEAUTY,
           calendarCrossAxisSpacing: 0,
+          monthTextAlign: TextAlign.left,
+          // monthBuilder: (context, month) {
+          //   return Text(DateFormat('yyyy년 M월').format(DateTime.parse(month)));
+          // },
+          // dayBuilder: (context, values) {
+          //   // print('values ${values.day}');
+          //   return Text(values.day.weekday.toString());
+          // },
+          // dayTextStyle: TextStyle(color: Colors.yellow),
+          daySelectedBackgroundColor: Color(0xFF4765FF),
+          daySelectedBackgroundColorBetween: Color(0xFFF6F6F6),
+          // daySelectedBackgroundColorBetween: Colors.pink,
+          dayRadius: 500,
+          // dayDisableBackgroundColor: Colors.amberAccent,
+          // dayDisableColor: Colors.amber,
         ),
       ),
     );

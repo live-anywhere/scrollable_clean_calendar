@@ -25,7 +25,7 @@ class MonthWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text =
-        '${DateFormat('MMMM', locale).format(DateTime(month.year, month.month)).capitalize()} ${DateFormat('yyyy', locale).format(DateTime(month.year, month.month))}';
+        '${DateFormat('yyyy', locale).format(DateTime(month.year, month.month))}년 ${DateFormat('MMMM', locale).format(DateTime(month.year, month.month)).capitalize()} ';
 
     if (monthBuilder != null) {
       return monthBuilder!(context, text);
