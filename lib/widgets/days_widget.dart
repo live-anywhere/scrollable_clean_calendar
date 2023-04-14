@@ -89,7 +89,7 @@ class DaysWidget extends StatelessWidget {
         }
 
         Widget widget;
-
+        final DateTime _toDay = DateTime.now();
         final dayValues = DayValues(
           day: day,
           isFirstDayOfWeek: day.weekday == cleanCalendarController.weekdayStart,
@@ -107,7 +107,7 @@ class DaysWidget extends StatelessWidget {
         } else {
           widget = <Layout, Widget Function()>{
             Layout.DEFAULT: () => _pattern(context, dayValues),
-            Layout.BEAUTY: () => _beauty(context, dayValues),
+            Layout.BEAUTY: () => _beauty(context, dayValues, _toDay),
           }[layout]!();
         }
 
@@ -211,7 +211,18 @@ class DaysWidget extends StatelessWidget {
     );
   }
 
-  Widget _beauty(BuildContext context, DayValues values) {
+  Color _setWeekendColor(DateTime date) {
+    switch(date.weekday) {
+      case 6:
+        return Colors.blue;
+      case 7:
+        return Colors.red;
+      default:
+        return Colors.black;
+    }
+  }
+
+  Widget _beauty(BuildContext context, DayValues values, DateTime today) {
     BorderRadiusGeometry? borderRadius;
     Color bgColor = Colors.transparent;
     TextStyle txtStyle =
@@ -221,11 +232,11 @@ class DaysWidget extends StatelessWidget {
               ? Colors.black
               : Colors.white
           : Theme.of(context).colorScheme.onSurface,
+      fontSize: 16,
       fontWeight: values.isFirstDayOfWeek || values.isLastDayOfWeek
           ? FontWeight.bold
           : null,
     );
-
     if (values.isSelected) {
       if (values.isFirstDayOfWeek) {
         borderRadius = BorderRadius.only(
@@ -292,6 +303,14 @@ class DaysWidget extends StatelessWidget {
             ? FontWeight.bold
             : null,
       );
+    } else {
+      txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
+        color: _setWeekendColor(values.day),
+        // fontSize: 16,
+        fontWeight: values.isFirstDayOfWeek || values.isLastDayOfWeek
+            ? FontWeight.bold
+            : null,
+      );
     }
 
     return Container(
@@ -302,6 +321,7 @@ class DaysWidget extends StatelessWidget {
       ),
       child: Stack(
       alignment: Alignment.center,
+      fit: StackFit.expand,
       children: [
         values.isSelected &&
             (values.selectedMinDate != null &&
@@ -312,12 +332,17 @@ class DaysWidget extends StatelessWidget {
               color: selectedBackgroundColor,
               borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
             )) : const SizedBox.shrink(),
-        Text(
-          values.text,
-          textAlign: TextAlign.center,
-          // style: txtStyle,
-          style: TextStyle(color: values.day.weekday == 6 ? Colors.blue : values.day.weekday == 7 ? Colors.red : values.day.isSameDay(values.selectedMinDate?? DateTime(2000)) ? Colors.white : values.day.isSameDay(values.selectedMaxDate?? DateTime(2000)) ? Colors.white : Colors.black),
-        ),],
+        Center(
+          child: Text(
+            values.text,
+            textAlign: TextAlign.center,
+            style: txtStyle,
+          ),
+        ),
+        Positioned(
+          bottom: 10,
+            child: values.day.isSameDay(today) ? const Text('오늘', style: TextStyle(color: Color(0xFFFF9D4D), fontSize: 8),) : const SizedBox.shrink())
+      ],
       )
     );
   }
