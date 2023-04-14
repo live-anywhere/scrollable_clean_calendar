@@ -14,6 +14,10 @@ class DayValues {
   /// The last day in the row for each week, but just the item seven
   final bool isLastDayOfWeek;
 
+  final DateTime isFirstDayOfMonth;
+
+  final DateTime isLastDayOfMonth;
+
   /// The min date selected
   /// If [rangeMode] is false the rangeMinDate is the date selected (don't use [rangeMaxDate])
   final DateTime? selectedMinDate;
@@ -33,6 +37,8 @@ class DayValues {
     required this.isSelected,
     required this.isFirstDayOfWeek,
     required this.isLastDayOfWeek,
+    required this.isFirstDayOfMonth,
+    required this.isLastDayOfMonth,
     this.selectedMinDate,
     this.selectedMaxDate,
     required this.minDate,

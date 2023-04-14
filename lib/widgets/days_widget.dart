@@ -89,11 +89,14 @@ class DaysWidget extends StatelessWidget {
         }
 
         Widget widget;
-        final DateTime _toDay = DateTime.now();
+        final DateTime toDay = DateTime.now();
+        // print('dayValues day $day');
         final dayValues = DayValues(
           day: day,
           isFirstDayOfWeek: day.weekday == cleanCalendarController.weekdayStart,
           isLastDayOfWeek: day.weekday == cleanCalendarController.weekdayEnd,
+          isFirstDayOfMonth: DateTime(day.year, day.month, 1),
+          isLastDayOfMonth: DateTime(day.year, day.month + 1, 0),
           isSelected: isSelected,
           maxDate: cleanCalendarController.maxDate,
           minDate: cleanCalendarController.minDate,
@@ -107,7 +110,7 @@ class DaysWidget extends StatelessWidget {
         } else {
           widget = <Layout, Widget Function()>{
             Layout.DEFAULT: () => _pattern(context, dayValues),
-            Layout.BEAUTY: () => _beauty(context, dayValues, _toDay),
+            Layout.BEAUTY: () => _beauty(context, dayValues, toDay),
           }[layout]!();
         }
 
@@ -238,17 +241,12 @@ class DaysWidget extends StatelessWidget {
           : null,
     );
     if (values.isSelected) {
-      if (values.isFirstDayOfWeek) {
-        borderRadius = BorderRadius.only(
-          topLeft: Radius.circular(radius),
-          bottomLeft: Radius.circular(radius),
-        );
-      } else if (values.isLastDayOfWeek) {
-        borderRadius = BorderRadius.only(
-          topRight: Radius.circular(radius),
-          bottomRight: Radius.circular(radius),
-        );
-      }
+      borderRadius = BorderRadius.only(
+        topLeft: Radius.circular(values.isFirstDayOfWeek || values.day.isSameDay(values.isFirstDayOfMonth) ? radius : 0),
+        bottomLeft: Radius.circular(values.isFirstDayOfWeek || values.day.isSameDay(values.isFirstDayOfMonth) ? radius : 0),
+        topRight: Radius.circular(values.isLastDayOfWeek || values.day.isSameDay(values.isLastDayOfMonth) ? radius : 0),
+        bottomRight: Radius.circular(values.isLastDayOfWeek || values.day.isSameDay(values.isLastDayOfMonth) ? radius : 0),
+      );
 
       if ((values.selectedMinDate != null &&
               values.day.isSameDay(values.selectedMinDate!)) ||
