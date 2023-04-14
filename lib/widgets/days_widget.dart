@@ -236,9 +236,6 @@ class DaysWidget extends StatelessWidget {
               : Colors.white
           : Theme.of(context).colorScheme.onSurface,
       fontSize: 16,
-      fontWeight: values.isFirstDayOfWeek || values.isLastDayOfWeek
-          ? FontWeight.bold
-          : null,
     );
     if (values.isSelected) {
       borderRadius = BorderRadius.only(
@@ -260,7 +257,6 @@ class DaysWidget extends StatelessWidget {
                   ? Colors.black
                   : Colors.white
               : Theme.of(context).colorScheme.onPrimary,
-          fontWeight: FontWeight.bold,
         );
 
         if (values.selectedMinDate == values.selectedMaxDate) {
@@ -270,6 +266,8 @@ class DaysWidget extends StatelessWidget {
           borderRadius = BorderRadius.only(
             topLeft: Radius.circular(radius),
             bottomLeft: Radius.circular(radius),
+            topRight: Radius.circular(values.selectedMaxDate == null ? radius : 0),
+            bottomRight: Radius.circular(values.selectedMaxDate == null ? radius : 0),
           );
         } else if (values.selectedMaxDate != null &&
             values.day.isSameDay(values.selectedMaxDate!)) {
@@ -284,30 +282,22 @@ class DaysWidget extends StatelessWidget {
         txtStyle =
             (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
           color:
-              selectedBackgroundColor ?? Theme.of(context).colorScheme.primary,
-          fontWeight: values.isFirstDayOfWeek || values.isLastDayOfWeek
-              ? FontWeight.bold
-              : null,
+              _setWeekendColor(values.day),
         );
       }
     } else if (values.day.isSameDay(values.minDate)) {
+      txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!;
     } else if (values.day.isBefore(values.minDate) ||
         values.day.isAfter(values.maxDate)) {
       txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
         color: dayDisableColor ??
             Theme.of(context).colorScheme.onSurface.withOpacity(.5),
         decoration: TextDecoration.lineThrough,
-        fontWeight: values.isFirstDayOfWeek || values.isLastDayOfWeek
-            ? FontWeight.bold
-            : null,
       );
     } else {
       txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
         color: _setWeekendColor(values.day),
         // fontSize: 16,
-        fontWeight: values.isFirstDayOfWeek || values.isLastDayOfWeek
-            ? FontWeight.bold
-            : null,
       );
     }
 
