@@ -343,4 +343,3 @@ class DaysWidget extends StatelessWidget {
     );
   }
 }
-시
