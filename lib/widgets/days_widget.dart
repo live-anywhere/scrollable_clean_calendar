@@ -328,7 +328,7 @@ class DaysWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 12,
+          bottom: 8,
             child: values.day.isSameDay(today) ? const Text('오늘', style: TextStyle(color: Color(0xFFFF9D4D), fontSize: 8),) : const SizedBox.shrink())
       ],
       )
