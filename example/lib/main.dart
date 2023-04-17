@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
     maxDate: DateTime.now().add(const Duration(days: 365)),
     onRangeSelected: (firstDate, secondDate) {},
     onDayTapped: (date) {},
-    // readOnly: true,
     onPreviousMinDateTapped: (date) {},
     onAfterMaxDateTapped: (date) {},
     weekdayStart: DateTime.sunday,
-    // initialFocusDate: DateTime(2023, 5),
-    // initialDateSelected: DateTime(2022, 3, 15),
-    // endDateSelected: DateTime(2022, 3, 20),
+    minRange: 5,
+    onMinRangeSelected: (minRange) {
+      print('onMinRangeSelected minRange $minRange');
+    }
   );
 
   @override
@@ -76,12 +76,13 @@ class MyApp extends StatelessWidget {
           //   return Text(values.day.weekday.toString());
           // },
           // dayTextStyle: TextStyle(color: Colors.yellow),
+
+
           daySelectedBackgroundColor: Color(0xFF4765FF),
           daySelectedBackgroundColorBetween: Color(0xFFF6F6F6),
           // daySelectedBackgroundColorBetween: Colors.pink,
           dayRadius: 500,
-          // dayDisableBackgroundColor: Colors.amberAccent,
-          // dayDisableColor: Colors.amber,
+          dayDisableColor: Color(0xFFDDDDDD),
         ),
       ),
     );

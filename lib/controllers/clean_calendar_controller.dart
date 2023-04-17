@@ -23,7 +23,7 @@ class CleanCalendarController extends ChangeNotifier {
   final Function(DateTime date)? onDayTapped;
 
   /// Function when a range is selected
-  final Function(DateTime minDate, DateTime? maxDate)? onRangeSelected;
+  final Function(DateTime? minDate, DateTime? maxDate)? onRangeSelected;
 
   /// When a date before the min date is tapped
   final Function(DateTime date)? onPreviousMinDateTapped;
@@ -39,6 +39,10 @@ class CleanCalendarController extends ChangeNotifier {
 
   /// An initial fucus date
   final DateTime? initialFocusDate;
+
+  final int? minRange;
+
+  final Function(int minRange)? onMinRangeSelected;
 
   late int weekdayEnd;
   List<DateTime> months = [];
@@ -59,6 +63,8 @@ class CleanCalendarController extends ChangeNotifier {
     this.onPreviousMinDateTapped,
     this.weekdayStart = DateTime.monday,
     this.initialFocusDate,
+    this.minRange = 0,
+    this.onMinRangeSelected
   })  : assert(weekdayStart <= DateTime.sunday),
         assert(weekdayStart >= DateTime.monday) {
     final x = weekdayStart - 1;
@@ -133,7 +139,15 @@ class CleanCalendarController extends ChangeNotifier {
       }
 
       if (onRangeSelected != null) {
-        onRangeSelected!(rangeMinDate!, rangeMaxDate);
+        if(rangeMaxDate != null && rangeMaxDate!.difference(rangeMinDate!).inDays < minRange!.toInt()) {
+          rangeMaxDate = null;
+          if(minRange != null) {
+            onMinRangeSelected!(minRange!);
+            clearSelectedDates();
+          }
+        }
+        onRangeSelected!(rangeMinDate, rangeMaxDate);
+
       }
     }
   }
