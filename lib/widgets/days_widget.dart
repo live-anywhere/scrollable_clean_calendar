@@ -331,7 +331,7 @@ class DaysWidget extends StatelessWidget {
         ),
         values.day.isSameDay(today)
                 ? Positioned(
-                    bottom: 8,
+                    bottom: 6,
                     child: Text(
                       '오늘',
                       style: txtStyle.copyWith(
