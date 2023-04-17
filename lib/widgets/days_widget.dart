@@ -14,6 +14,7 @@ class DaysWidget extends StatelessWidget {
     BuildContext context,
     DayValues values,
   )? dayBuilder;
+  final Color? todayColor;
   final Color? selectedBackgroundColor;
   final Color? backgroundColor;
   final Color? selectedBackgroundColorBetween;
@@ -30,6 +31,7 @@ class DaysWidget extends StatelessWidget {
     required this.calendarMainAxisSpacing,
     required this.layout,
     required this.dayBuilder,
+    required this.todayColor,
     required this.selectedBackgroundColor,
     required this.backgroundColor,
     required this.selectedBackgroundColorBetween,
@@ -324,13 +326,19 @@ class DaysWidget extends StatelessWidget {
           child: Text(
             values.text,
             textAlign: TextAlign.center,
-            style: txtStyle,
+            style: values.day.isSameDay(today) ? txtStyle.copyWith(color: todayColor?? txtStyle.color) : txtStyle,
           ),
         ),
-        Positioned(
-          bottom: 8,
-            child: values.day.isSameDay(today) ? const Text('오늘', style: TextStyle(color: Color(0xFFFF9D4D), fontSize: 8),) : const SizedBox.shrink())
-      ],
+        values.day.isSameDay(today)
+                ? Positioned(
+                    bottom: 8,
+                    child: Text(
+                      '오늘',
+                      style: txtStyle.copyWith(
+                          fontSize: 8, color: todayColor ?? txtStyle.color),
+                    ))
+                : const SizedBox.shrink()
+          ],
       )
     );
   }

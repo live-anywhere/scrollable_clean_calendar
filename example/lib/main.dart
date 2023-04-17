@@ -82,6 +82,7 @@ class MyApp extends StatelessWidget {
           daySelectedBackgroundColorBetween: Color(0xFFF6F6F6),
           // daySelectedBackgroundColorBetween: Colors.pink,
           dayRadius: 500,
+          todayColor: Color(0xFFFF9D4D),
           dayDisableColor: Color(0xFFDDDDDD),
         ),
       ),
