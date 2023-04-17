@@ -326,10 +326,10 @@ class DaysWidget extends StatelessWidget {
           child: Text(
             values.text,
             textAlign: TextAlign.center,
-            style: values.day.isSameDay(today) ? txtStyle.copyWith(color: todayColor?? txtStyle.color) : txtStyle,
+            style: values.day.isSameDay(today) && !values.isSelected ? txtStyle.copyWith(color: todayColor?? txtStyle.color) : txtStyle,
           ),
         ),
-        values.day.isSameDay(today)
+        values.day.isSameDay(today) && !values.isSelected
                 ? Positioned(
                     bottom: 6,
                     child: Text(
@@ -343,3 +343,4 @@ class DaysWidget extends StatelessWidget {
     );
   }
 }
+시
