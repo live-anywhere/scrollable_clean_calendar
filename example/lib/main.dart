@@ -61,34 +61,47 @@ class MyApp extends StatelessWidget {
         //     calendarController.jumpToMonth(date: DateTime(2022, 8));
         //   },
         // ),
-        body: ScrollableCleanCalendar(
-          locale: 'ko',
-          calendarController: calendarController,
-          showWeekdays: false,
-          layout: Layout.BEAUTY,
-          calendarCrossAxisSpacing: 0,
-          monthTextAlign: TextAlign.left,
-          dayTextStyle: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: ScrollableCleanCalendar(
+            locale: 'ko',
+            calendarController: calendarController,
+            showWeekdays: false,
+            layout: Layout.BEAUTY,
+            padding: EdgeInsets.zero,
+            calendarCrossAxisSpacing: 0,
+            spaceBetweenMonthAndCalendar: 0,
+            calendarMainAxisSpacing: 6,
+            spaceBetweenCalendars: 30,
+            monthTextAlign: TextAlign.left,
+            monthTextStyle: const TextStyle(
+              color: Color(0xFF3A3A3A),
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            dayTextStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+            ),
+            // monthBuilder: (context, month) {
+            //   return Text(DateFormat('yyyy년 M월').format(DateTime.parse(month)));
+            // },
+
+            // dayBuilder: (context, values) {
+            //   // print('values ${values.day}');
+            //   return Text(values.day.weekday.toString());
+            // },
+            // dayTextStyle: TextStyle(color: Colors.yellow),
+
+
+            daySelectedBackgroundColor: Color(0xFF4765FF),
+            daySelectedBackgroundColorBetween: Color(0xFFF6F6F6),
+            // daySelectedBackgroundColorBetween: Colors.pink,
+            dayRadius: 46,
+            todayColor: Color(0xFFFF9D4D),
+            dayDisableColor: Color(0xFFDDDDDD),
           ),
-          // monthBuilder: (context, month) {
-          //   return Text(DateFormat('yyyy년 M월').format(DateTime.parse(month)));
-          // },
-          // dayBuilder: (context, values) {
-          //   // print('values ${values.day}');
-          //   return Text(values.day.weekday.toString());
-          // },
-          // dayTextStyle: TextStyle(color: Colors.yellow),
-
-
-          daySelectedBackgroundColor: Color(0xFF4765FF),
-          daySelectedBackgroundColorBetween: Color(0xFFF6F6F6),
-          // daySelectedBackgroundColorBetween: Colors.pink,
-          dayRadius: 500,
-          todayColor: Color(0xFFFF9D4D),
-          dayDisableColor: Color(0xFFDDDDDD),
         ),
       ),
     );

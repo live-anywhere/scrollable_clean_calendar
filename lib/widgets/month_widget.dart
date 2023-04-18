@@ -46,12 +46,15 @@ class MonthWidget extends StatelessWidget {
   }
 
   Widget _beauty(BuildContext context, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Text(
-        text.capitalize(),
-        textAlign: textAlign ?? TextAlign.center,
-        style: textStyle ?? Theme.of(context).textTheme.headline6!,
+    return SizedBox(
+      height: 46,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text.capitalize(),
+          textAlign: textAlign ?? TextAlign.center,
+          style: textStyle ?? Theme.of(context).textTheme.headline6!,
+        ),
       ),
     );
   }

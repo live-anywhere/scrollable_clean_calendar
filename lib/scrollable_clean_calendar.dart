@@ -151,13 +151,14 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
       itemBuilder: (context, index) {
         final month = widget.calendarController.months[index];
 
-        return childCollumn(month);
+        return childColumn(month);
       },
     );
   }
 
   Widget scrollablePositionedListCalendar() {
     return ScrollablePositionedList.separated(
+      physics: const BouncingScrollPhysics(),
       itemScrollController: widget.calendarController.itemScrollController,
       padding: widget.padding ??
           const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -166,13 +167,12 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
       itemCount: widget.calendarController.months.length,
       itemBuilder: (context, index) {
         final month = widget.calendarController.months[index];
-
-        return childCollumn(month);
+        return childColumn(month);
       },
     );
   }
 
-  Widget childCollumn(DateTime month) {
+  Widget childColumn(DateTime month) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

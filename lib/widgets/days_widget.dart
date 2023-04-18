@@ -62,81 +62,83 @@ class DaysWidget extends StatelessWidget {
     // If the monthPositionStartDay is equal to 7, then in this layout logic will cause a trouble, beacause it will
     // have a line in blank and in this case 7 is the same as 0.
 
-    return GridView.count(
-      crossAxisCount: DateTime.daysPerWeek,
-      physics: const NeverScrollableScrollPhysics(),
-      addRepaintBoundaries: false,
-      padding: EdgeInsets.zero,
-      crossAxisSpacing: calendarCrossAxisSpacing,
-      mainAxisSpacing: calendarMainAxisSpacing,
-      shrinkWrap: true,
-      children: List.generate(
-          DateTime(month.year, month.month + 1, 0).day + start, (index) {
-        if (index < start) return const SizedBox.shrink();
-        final day = DateTime(month.year, month.month, (index + 1 - start));
-        final text = (index + 1 - start).toString();
+    return LayoutBuilder(builder: (context, constraintType) {
+      return GridView.count(
+        crossAxisCount: DateTime.daysPerWeek,
+        physics: const NeverScrollableScrollPhysics(),
+        addRepaintBoundaries: false,
+        padding: EdgeInsets.zero,
+        crossAxisSpacing: calendarCrossAxisSpacing,
+        mainAxisSpacing: calendarMainAxisSpacing,
+        childAspectRatio: (constraintType.maxWidth / DateTime.daysPerWeek) / 46 ,
+        shrinkWrap: true,
+        children: List.generate(
+            DateTime(month.year, month.month + 1, 0).day + start, (index) {
+          if (index < start) return const SizedBox.shrink();
+          final day = DateTime(month.year, month.month, (index + 1 - start));
+          final text = (index + 1 - start).toString();
 
-        bool isSelected = false;
+          bool isSelected = false;
 
-        if (cleanCalendarController.rangeMinDate != null) {
-          if (cleanCalendarController.rangeMinDate != null &&
-              cleanCalendarController.rangeMaxDate != null) {
-            isSelected = day
-                    .isSameDayOrAfter(cleanCalendarController.rangeMinDate!) &&
-                day.isSameDayOrBefore(cleanCalendarController.rangeMaxDate!);
-          } else {
-            isSelected =
-                day.isAtSameMomentAs(cleanCalendarController.rangeMinDate!);
-          }
-        }
-
-        Widget widget;
-        final DateTime toDay = DateTime.now();
-        // print('dayValues day $day');
-        final dayValues = DayValues(
-          day: day,
-          isFirstDayOfWeek: day.weekday == cleanCalendarController.weekdayStart,
-          isLastDayOfWeek: day.weekday == cleanCalendarController.weekdayEnd,
-          isFirstDayOfMonth: DateTime(day.year, day.month, 1),
-          isLastDayOfMonth: DateTime(day.year, day.month + 1, 0),
-          isSelected: isSelected,
-          maxDate: cleanCalendarController.maxDate,
-          minDate: cleanCalendarController.minDate,
-          text: text,
-          selectedMaxDate: cleanCalendarController.rangeMaxDate,
-          selectedMinDate: cleanCalendarController.rangeMinDate,
-        );
-
-        if (dayBuilder != null) {
-          widget = dayBuilder!(context, dayValues);
-        } else {
-          widget = <Layout, Widget Function()>{
-            Layout.DEFAULT: () => _pattern(context, dayValues),
-            Layout.BEAUTY: () => _beauty(context, dayValues, toDay),
-          }[layout]!();
-        }
-
-        return GestureDetector(
-          onTap: () {
-            if (day.isBefore(cleanCalendarController.minDate) &&
-                !day.isSameDay(cleanCalendarController.minDate)) {
-              if (cleanCalendarController.onPreviousMinDateTapped != null) {
-                cleanCalendarController.onPreviousMinDateTapped!(day);
-              }
-            } else if (day.isAfter(cleanCalendarController.maxDate)) {
-              if (cleanCalendarController.onAfterMaxDateTapped != null) {
-                cleanCalendarController.onAfterMaxDateTapped!(day);
-              }
+          if (cleanCalendarController.rangeMinDate != null) {
+            if (cleanCalendarController.rangeMinDate != null &&
+                cleanCalendarController.rangeMaxDate != null) {
+              isSelected = day
+                  .isSameDayOrAfter(cleanCalendarController.rangeMinDate!) &&
+                  day.isSameDayOrBefore(cleanCalendarController.rangeMaxDate!);
             } else {
-              if (!cleanCalendarController.readOnly) {
-                cleanCalendarController.onDayClick(day);
-              }
+              isSelected =
+                  day.isAtSameMomentAs(cleanCalendarController.rangeMinDate!);
             }
-          },
-          child: widget,
-        );
-      }),
-    );
+          }
+
+          Widget widget;
+          final DateTime toDay = DateTime.now();
+          final dayValues = DayValues(
+            day: day,
+            isFirstDayOfWeek: day.weekday == cleanCalendarController.weekdayStart,
+            isLastDayOfWeek: day.weekday == cleanCalendarController.weekdayEnd,
+            isFirstDayOfMonth: DateTime(day.year, day.month, 1),
+            isLastDayOfMonth: DateTime(day.year, day.month + 1, 0),
+            isSelected: isSelected,
+            maxDate: cleanCalendarController.maxDate,
+            minDate: cleanCalendarController.minDate,
+            text: text,
+            selectedMaxDate: cleanCalendarController.rangeMaxDate,
+            selectedMinDate: cleanCalendarController.rangeMinDate,
+          );
+
+          if (dayBuilder != null) {
+            widget = dayBuilder!(context, dayValues);
+          } else {
+            widget = <Layout, Widget Function()>{
+              Layout.DEFAULT: () => _pattern(context, dayValues),
+              Layout.BEAUTY: () => _beauty(context, dayValues, toDay),
+            }[layout]!();
+          }
+
+          return GestureDetector(
+            onTap: () {
+              if (day.isBefore(cleanCalendarController.minDate) &&
+                  !day.isSameDay(cleanCalendarController.minDate)) {
+                if (cleanCalendarController.onPreviousMinDateTapped != null) {
+                  cleanCalendarController.onPreviousMinDateTapped!(day);
+                }
+              } else if (day.isAfter(cleanCalendarController.maxDate)) {
+                if (cleanCalendarController.onAfterMaxDateTapped != null) {
+                  cleanCalendarController.onAfterMaxDateTapped!(day);
+                }
+              } else {
+                if (!cleanCalendarController.readOnly) {
+                  cleanCalendarController.onDayClick(day);
+                }
+              }
+            },
+            child: widget,
+          );
+        }),
+      );
+    });
   }
 
   Widget _pattern(BuildContext context, DayValues values) {
@@ -218,11 +220,11 @@ class DaysWidget extends StatelessWidget {
   Color _setWeekendColor(DateTime date) {
     switch(date.weekday) {
       case 6:
-        return Colors.blue;
+        return const Color(0xFF7CB1EE);
       case 7:
-        return Colors.red;
+        return const Color(0xFFE15241);
       default:
-        return Colors.black;
+        return const Color(0xFF3A3A3A);
     }
   }
 
@@ -258,6 +260,7 @@ class DaysWidget extends StatelessWidget {
                   ? Colors.black
                   : Colors.white
               : Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold
         );
 
         if (values.selectedMinDate == values.selectedMaxDate) {
@@ -297,61 +300,65 @@ class DaysWidget extends StatelessWidget {
     } else {
       txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
         color: _setWeekendColor(values.day),
-        // fontSize: 16,
       );
     }
 
     return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: borderRadius,
-      ),
-      child: Stack(
-      alignment: Alignment.center,
-      fit: StackFit.expand,
-      children: [
-        values.isSelected &&
-            (values.selectedMinDate != null &&
-                values.day.isSameDay(values.selectedMinDate!)) ||
-            (values.selectedMaxDate != null &&
-                values.day.isSameDay(values.selectedMaxDate!)) ? Container(alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: selectedBackgroundColor,
-              borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
-            )) : const SizedBox.shrink(),
-        Center(
-          child: Stack(
-            children: [
-              CustomPaint(
-                painter: !values.day.isSameDay(values.minDate) && values.day.isBefore(values.minDate) ||
-                    values.day.isAfter(values.maxDate) ? DiagonalPainter(dayDisableColor ??
-                    Theme.of(context).colorScheme.onSurface.withOpacity(.5)) : null,
-                child: Container(
-                  constraints: const BoxConstraints(
-                    minWidth: 14,
-                  ),
-                  child: Text(
-                    values.text,
-                    textAlign: TextAlign.center,
-                    style: values.day.isSameDay(today) && !values.isSelected ? txtStyle.copyWith(color: todayColor?? txtStyle.color) : txtStyle,
-                  ),
-                ),
-              ),
-            ],
-          ),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: borderRadius,
         ),
-        values.day.isSameDay(today) && !values.isSelected
+        child: Stack(
+          alignment: Alignment.center,
+          // fit: StackFit.expand,
+          fit: StackFit.loose,
+          children: [
+            values.isSelected &&
+                (values.selectedMinDate != null &&
+                    values.day.isSameDay(values.selectedMinDate!)) ||
+                (values.selectedMaxDate != null &&
+                    values.day.isSameDay(values.selectedMaxDate!)) ? Container(
+                alignment: Alignment.center,
+                width: 46,
+                decoration: BoxDecoration(
+                  color: selectedBackgroundColor,
+                  borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
+                )) : const SizedBox.shrink(),
+            Center(
+              child: Stack(
+                children: [
+                  CustomPaint(
+                    painter: !values.day.isSameDay(values.minDate) && values.day.isBefore(values.minDate) ||
+                        values.day.isAfter(values.maxDate) ? DiagonalPainter(dayDisableColor ??
+                        Theme.of(context).colorScheme.onSurface.withOpacity(.5)) : null,
+                    child: Container(
+                      // color: Colors.blueAccent,
+                      constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16
+                      ),
+                      child: Text(
+                        values.text,
+                        textAlign: TextAlign.center,
+                        style: values.day.isSameDay(today) && !values.isSelected ? txtStyle.copyWith(color: todayColor?? txtStyle.color) : txtStyle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            values.day.isSameDay(today) && !values.isSelected
                 ? Positioned(
-                    bottom: 6,
-                    child: Text(
-                      '오늘',
-                      style: txtStyle.copyWith(
-                          fontSize: 8, color: todayColor ?? txtStyle.color),
-                    ))
+                bottom: 8,
+                child: Text(
+                  '오늘',
+                  style: txtStyle.copyWith(
+                      fontSize: 8, color: todayColor ?? txtStyle.color, fontWeight: FontWeight.w500),
+                ))
                 : const SizedBox.shrink()
           ],
-      )
+        )
     );
   }
 }
@@ -364,7 +371,7 @@ class DiagonalPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = dayDisableColor
-      ..strokeWidth = 1;
+      ..strokeWidth = 0.5;
 
     canvas.drawLine(
       Offset(0, size.height),
