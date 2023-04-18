@@ -68,6 +68,11 @@ class MyApp extends StatelessWidget {
           layout: Layout.BEAUTY,
           calendarCrossAxisSpacing: 0,
           monthTextAlign: TextAlign.left,
+          dayTextStyle: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+          ),
           // monthBuilder: (context, month) {
           //   return Text(DateFormat('yyyy년 M월').format(DateTime.parse(month)));
           // },

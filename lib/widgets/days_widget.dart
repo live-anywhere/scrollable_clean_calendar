@@ -191,7 +191,6 @@ class DaysWidget extends StatelessWidget {
       txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
         color: dayDisableColor ??
             Theme.of(context).colorScheme.onSurface.withOpacity(.5),
-        decoration: TextDecoration.lineThrough,
       );
     }
 
@@ -294,7 +293,6 @@ class DaysWidget extends StatelessWidget {
       txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
         color: dayDisableColor ??
             Theme.of(context).colorScheme.onSurface.withOpacity(.5),
-        decoration: TextDecoration.lineThrough,
       );
     } else {
       txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyText1)!.copyWith(
@@ -323,10 +321,24 @@ class DaysWidget extends StatelessWidget {
               borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
             )) : const SizedBox.shrink(),
         Center(
-          child: Text(
-            values.text,
-            textAlign: TextAlign.center,
-            style: values.day.isSameDay(today) && !values.isSelected ? txtStyle.copyWith(color: todayColor?? txtStyle.color) : txtStyle,
+          child: Stack(
+            children: [
+              CustomPaint(
+                painter: !values.day.isSameDay(values.minDate) && values.day.isBefore(values.minDate) ||
+                    values.day.isAfter(values.maxDate) ? DiagonalPainter(dayDisableColor ??
+                    Theme.of(context).colorScheme.onSurface.withOpacity(.5)) : null,
+                child: Container(
+                  constraints: const BoxConstraints(
+                    minWidth: 14,
+                  ),
+                  child: Text(
+                    values.text,
+                    textAlign: TextAlign.center,
+                    style: values.day.isSameDay(today) && !values.isSelected ? txtStyle.copyWith(color: todayColor?? txtStyle.color) : txtStyle,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         values.day.isSameDay(today) && !values.isSelected
@@ -343,3 +355,28 @@ class DaysWidget extends StatelessWidget {
     );
   }
 }
+
+class DiagonalPainter extends CustomPainter {
+
+  Color dayDisableColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = dayDisableColor
+      ..strokeWidth = 1;
+
+    canvas.drawLine(
+      Offset(0, size.height),
+      Offset(size.width, 0),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+
+  DiagonalPainter(this.dayDisableColor);
+}
+
+
