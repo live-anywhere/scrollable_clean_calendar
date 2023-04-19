@@ -158,7 +158,7 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
 
   Widget scrollablePositionedListCalendar() {
     return ScrollablePositionedList.separated(
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       itemScrollController: widget.calendarController.itemScrollController,
       padding: widget.padding ??
           const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
