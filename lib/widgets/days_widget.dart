@@ -220,9 +220,9 @@ class DaysWidget extends StatelessWidget {
   Color _setWeekendColor(DateTime date) {
     switch(date.weekday) {
       case 6:
-        return const Color(0xFF7CB1EE);
+        return const Color(0xFF4765FF);
       case 7:
-        return const Color(0xFFE15241);
+        return const Color(0xFFFF4D4D);
       default:
         return const Color(0xFF3A3A3A);
     }
@@ -397,10 +397,10 @@ class DaysWidget extends StatelessWidget {
             ),
             values.day.isSameDay(today) && !values.isSelected
                 ? Positioned(
-                bottom: 8,
+                bottom: 6,
                 child: Text(
                   '오늘',
-                  style: txtStyle.copyWith(fontSize: 8, fontWeight: FontWeight.w500),
+                  style: txtStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w500),
                 ))
                 : const SizedBox.shrink()
           ],
