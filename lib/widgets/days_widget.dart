@@ -220,9 +220,9 @@ class DaysWidget extends StatelessWidget {
   Color _setWeekendColor(DateTime date) {
     switch(date.weekday) {
       case 6:
-        return const Color(0xFF4765FF);
+        return const Color(0xFF3C6FFA);
       case 7:
-        return const Color(0xFFFF4D4D);
+        return const Color(0xFFED2A61);
       default:
         return const Color(0xFF3A3A3A);
     }
@@ -382,8 +382,8 @@ class DaysWidget extends StatelessWidget {
                         Theme.of(context).colorScheme.onSurface.withOpacity(.5)) : null,
                     child: Container(
                       constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16
+                        minWidth: 14,
+                        minHeight: 14,
                       ),
                       child: Text(
                         values.text,
