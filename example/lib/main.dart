@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     onPreviousMinDateTapped: (date) {},
     onAfterMaxDateTapped: (date) {},
     weekdayStart: DateTime.sunday,
-    minRange: 5,
+    minRange: 6,
     onMinRangeSelected: (minRange) {
       print('onMinRangeSelected minRange $minRange');
     }
@@ -55,14 +55,8 @@ class MyApp extends StatelessWidget {
             )
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   child: const Icon(Icons.arrow_downward),
-        //   onPressed: () {
-        //     calendarController.jumpToMonth(date: DateTime(2022, 8));
-        //   },
-        // ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: ScrollableCleanCalendar(
             locale: 'ko',
             calendarController: calendarController,
@@ -76,7 +70,7 @@ class MyApp extends StatelessWidget {
             monthTextAlign: TextAlign.left,
             monthTextStyle: const TextStyle(
               color: Color(0xFF3A3A3A),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               fontSize: 16,
             ),
             dayTextStyle: const TextStyle(
@@ -84,20 +78,8 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w400,
               fontSize: 14,
             ),
-            // monthBuilder: (context, month) {
-            //   return Text(DateFormat('yyyy년 M월').format(DateTime.parse(month)));
-            // },
-
-            // dayBuilder: (context, values) {
-            //   // print('values ${values.day}');
-            //   return Text(values.day.weekday.toString());
-            // },
-            // dayTextStyle: TextStyle(color: Colors.yellow),
-
-
             daySelectedBackgroundColor: Color(0xFF4765FF),
             daySelectedBackgroundColorBetween: Color(0xFFF6F6F6),
-            // daySelectedBackgroundColorBetween: Colors.pink,
             dayRadius: 46,
             todayColor: Color(0xFFFF9D4D),
             dayDisableColor: Color(0xFFDDDDDD),
