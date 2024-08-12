@@ -13,14 +13,14 @@ class WeekdaysWidget extends StatelessWidget {
   final Widget Function(BuildContext context, String weekday)? weekdayBuilder;
 
   const WeekdaysWidget({
-    Key? key,
+    super.key,
     required this.showWeekdays,
     required this.cleanCalendarController,
     required this.locale,
     required this.layout,
     required this.weekdayBuilder,
     required this.textStyle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +51,10 @@ class WeekdaysWidget extends StatelessWidget {
       child: Text(
         weekday.capitalize(),
         style: textStyle ??
-            Theme.of(context).textTheme.bodyText1!.copyWith(
+            Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyLarge!
                       .color!
                       .withOpacity(.4),
                   fontWeight: FontWeight.bold,
@@ -68,10 +68,10 @@ class WeekdaysWidget extends StatelessWidget {
       child: Text(
         weekday.capitalize(),
         style: textStyle ??
-            Theme.of(context).textTheme.bodyText1!.copyWith(
+            Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyLarge!
                       .color!
                       .withOpacity(.4),
                   fontWeight: FontWeight.bold,
