@@ -43,7 +43,7 @@ class WeekdaysWidget extends StatelessWidget {
 
         return <Layout, Widget Function()>{
           Layout.DEFAULT: () => _pattern(context, weekDay),
-          Layout.BEAUTY: () => _beauty(context, weekDay)
+          Layout.BEAUTY: () => _beauty(context, weekDay),
         }[layout]!();
       }),
     );

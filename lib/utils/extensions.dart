@@ -29,8 +29,7 @@ extension DateUtilsExtensions on DateTime {
 
   bool isSameDayOrBefore(DateTime other) => isBefore(other) || isSameDay(other);
 
-  bool isSameDay(DateTime other) =>
-      year == other.year && month == other.month && day == other.day;
+  bool isSameDay(DateTime other) => year == other.year && month == other.month && day == other.day;
 
   DateTime removeTime() => DateTime(year, month, day);
 }

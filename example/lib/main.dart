@@ -10,19 +10,22 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final calendarController = CleanCalendarController(
-      minDate: DateTime.now(),
-      maxDate: DateTime.now().add(const Duration(days: 365)),
-      onRangeSelected: (firstDate, secondDate) {},
-      onDayTapped: (date) {},
-      onPreviousMinDateTapped: (date) {},
-      onAfterMaxDateTapped: (date) {},
-      weekdayStart: DateTime.sunday,
-      minRange: 6,
-      onMinRangeSelected: (minRange) {
-        print('onMinRangeSelected minRange $minRange');
-      });
+    minDate: DateTime.now(),
+    maxDate: DateTime.now().add(const Duration(days: 365)),
+    onRangeSelected: (firstDate, secondDate) {},
+    onDayTapped: (date) {},
+    onPreviousMinDateTapped: (date) {},
+    onAfterMaxDateTapped: (date) {},
+    weekdayStart: DateTime.sunday,
+    minRange: 6,
+    onMinRangeSelected: (minRange) {
+      debugPrint('onMinRangeSelected minRange $minRange');
+    },
+  );
 
   final _today = DateTime.now();
+
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class MyApp extends StatelessWidget {
                 calendarController.clearSelectedDates();
               },
               icon: const Icon(Icons.clear),
-            )
+            ),
           ],
         ),
         body: Padding(
@@ -92,7 +95,7 @@ class MyApp extends StatelessWidget {
                       fontSize: 10,
                     ),
                   ),
-                )
+                ),
             ],
             todayColor: const Color(0xFFFF9D4D),
             dayDisableColor: const Color(0xFFDDDDDD),

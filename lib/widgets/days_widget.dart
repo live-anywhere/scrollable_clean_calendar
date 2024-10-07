@@ -62,78 +62,80 @@ class DaysWidget extends StatelessWidget {
     // If the monthPositionStartDay is equal to 7, then in this layout logic will cause a trouble, beacause it will
     // have a line in blank and in this case 7 is the same as 0.
 
-    return LayoutBuilder(builder: (context, constraintType) {
-      return GridView.count(
-        crossAxisCount: DateTime.daysPerWeek,
-        physics: const NeverScrollableScrollPhysics(),
-        addRepaintBoundaries: false,
-        padding: EdgeInsets.zero,
-        crossAxisSpacing: calendarCrossAxisSpacing,
-        mainAxisSpacing: calendarMainAxisSpacing,
-        childAspectRatio: aspectRatio ?? (constraintType.maxWidth / DateTime.daysPerWeek) / 46,
-        shrinkWrap: true,
-        children: List.generate(DateTime(month.year, month.month + 1, 0).day + start, (index) {
-          if (index < start) return const SizedBox.shrink();
-          final day = DateTime(month.year, month.month, (index + 1 - start));
-          final text = (index + 1 - start).toString();
+    return LayoutBuilder(
+      builder: (context, constraintType) {
+        return GridView.count(
+          crossAxisCount: DateTime.daysPerWeek,
+          physics: const NeverScrollableScrollPhysics(),
+          addRepaintBoundaries: false,
+          padding: EdgeInsets.zero,
+          crossAxisSpacing: calendarCrossAxisSpacing,
+          mainAxisSpacing: calendarMainAxisSpacing,
+          childAspectRatio: aspectRatio ?? (constraintType.maxWidth / DateTime.daysPerWeek) / 46,
+          shrinkWrap: true,
+          children: List.generate(DateTime(month.year, month.month + 1, 0).day + start, (index) {
+            if (index < start) return const SizedBox.shrink();
+            final day = DateTime(month.year, month.month, (index + 1 - start));
+            final text = (index + 1 - start).toString();
 
-          bool isSelected = false;
+            bool isSelected = false;
 
-          if (cleanCalendarController.rangeMinDate != null) {
-            if (cleanCalendarController.rangeMinDate != null && cleanCalendarController.rangeMaxDate != null) {
-              isSelected = day.isSameDayOrAfter(cleanCalendarController.rangeMinDate!) &&
-                  day.isSameDayOrBefore(cleanCalendarController.rangeMaxDate!);
-            } else {
-              isSelected = day.isAtSameMomentAs(cleanCalendarController.rangeMinDate!);
-            }
-          }
-
-          Widget widget;
-          final DateTime toDay = DateTime.now();
-          final dayValues = DayValues(
-            day: day,
-            isFirstDayOfWeek: day.weekday == cleanCalendarController.weekdayStart,
-            isLastDayOfWeek: day.weekday == cleanCalendarController.weekdayEnd,
-            isFirstDayOfMonth: DateTime(day.year, day.month, 1),
-            isLastDayOfMonth: DateTime(day.year, day.month + 1, 0),
-            isSelected: isSelected,
-            maxDate: cleanCalendarController.maxDate,
-            minDate: cleanCalendarController.minDate,
-            text: text,
-            selectedMaxDate: cleanCalendarController.rangeMaxDate,
-            selectedMinDate: cleanCalendarController.rangeMinDate,
-          );
-
-          if (dayBuilder != null) {
-            widget = dayBuilder!(context, dayValues);
-          } else {
-            widget = <Layout, Widget Function()>{
-              Layout.DEFAULT: () => _pattern(context, dayValues),
-              Layout.BEAUTY: () => _beauty(context, dayValues, toDay),
-            }[layout]!();
-          }
-
-          return GestureDetector(
-            onTap: () {
-              if (day.isBefore(cleanCalendarController.minDate) && !day.isSameDay(cleanCalendarController.minDate)) {
-                if (cleanCalendarController.onPreviousMinDateTapped != null) {
-                  cleanCalendarController.onPreviousMinDateTapped!(day);
-                }
-              } else if (day.isAfter(cleanCalendarController.maxDate)) {
-                if (cleanCalendarController.onAfterMaxDateTapped != null) {
-                  cleanCalendarController.onAfterMaxDateTapped!(day);
-                }
+            if (cleanCalendarController.rangeMinDate != null) {
+              if (cleanCalendarController.rangeMinDate != null && cleanCalendarController.rangeMaxDate != null) {
+                isSelected = day.isSameDayOrAfter(cleanCalendarController.rangeMinDate!) &&
+                    day.isSameDayOrBefore(cleanCalendarController.rangeMaxDate!);
               } else {
-                if (!cleanCalendarController.readOnly) {
-                  cleanCalendarController.onDayClick(day);
-                }
+                isSelected = day.isAtSameMomentAs(cleanCalendarController.rangeMinDate!);
               }
-            },
-            child: widget,
-          );
-        }),
-      );
-    });
+            }
+
+            Widget widget;
+            final DateTime toDay = DateTime.now();
+            final dayValues = DayValues(
+              day: day,
+              isFirstDayOfWeek: day.weekday == cleanCalendarController.weekdayStart,
+              isLastDayOfWeek: day.weekday == cleanCalendarController.weekdayEnd,
+              isFirstDayOfMonth: DateTime(day.year, day.month, 1),
+              isLastDayOfMonth: DateTime(day.year, day.month + 1, 0),
+              isSelected: isSelected,
+              maxDate: cleanCalendarController.maxDate,
+              minDate: cleanCalendarController.minDate,
+              text: text,
+              selectedMaxDate: cleanCalendarController.rangeMaxDate,
+              selectedMinDate: cleanCalendarController.rangeMinDate,
+            );
+
+            if (dayBuilder != null) {
+              widget = dayBuilder!(context, dayValues);
+            } else {
+              widget = <Layout, Widget Function()>{
+                Layout.DEFAULT: () => _pattern(context, dayValues),
+                Layout.BEAUTY: () => _beauty(context, dayValues, toDay),
+              }[layout]!();
+            }
+
+            return GestureDetector(
+              onTap: () {
+                if (day.isBefore(cleanCalendarController.minDate) && !day.isSameDay(cleanCalendarController.minDate)) {
+                  if (cleanCalendarController.onPreviousMinDateTapped != null) {
+                    cleanCalendarController.onPreviousMinDateTapped!(day);
+                  }
+                } else if (day.isAfter(cleanCalendarController.maxDate)) {
+                  if (cleanCalendarController.onAfterMaxDateTapped != null) {
+                    cleanCalendarController.onAfterMaxDateTapped!(day);
+                  }
+                } else {
+                  if (!cleanCalendarController.readOnly) {
+                    cleanCalendarController.onDayClick(day);
+                  }
+                }
+              },
+              child: widget,
+            );
+          }),
+        );
+      },
+    );
   }
 
   Widget _pattern(BuildContext context, DayValues values) {
@@ -212,35 +214,44 @@ class DaysWidget extends StatelessWidget {
 
   Widget _beauty(BuildContext context, DayValues values, DateTime today) {
     BorderRadiusGeometry? borderRadius;
-    LinearGradient gradientLeft = LinearGradient(colors: [
-      selectedBackgroundColorBetween!,
-      selectedBackgroundColorBetween!,
-      Colors.transparent,
-      Colors.transparent
-    ], stops: const [
-      0,
-      0.5,
-      0.5,
-      1
-    ]);
-    LinearGradient gradientRight = LinearGradient(colors: [
-      Colors.transparent,
-      Colors.transparent,
-      selectedBackgroundColorBetween!,
-      selectedBackgroundColorBetween!,
-    ], stops: const [
-      0,
-      0.5,
-      0.5,
-      1,
-    ]);
-    LinearGradient gradientFull = LinearGradient(colors: [
-      selectedBackgroundColorBetween!,
-      selectedBackgroundColorBetween!,
-    ], stops: const [
-      0,
-      1
-    ]);
+    LinearGradient gradientLeft = LinearGradient(
+      colors: [
+        selectedBackgroundColorBetween!,
+        selectedBackgroundColorBetween!,
+        Colors.transparent,
+        Colors.transparent,
+      ],
+      stops: const [
+        0,
+        0.5,
+        0.5,
+        1,
+      ],
+    );
+    LinearGradient gradientRight = LinearGradient(
+      colors: [
+        Colors.transparent,
+        Colors.transparent,
+        selectedBackgroundColorBetween!,
+        selectedBackgroundColorBetween!,
+      ],
+      stops: const [
+        0,
+        0.5,
+        0.5,
+        1,
+      ],
+    );
+    LinearGradient gradientFull = LinearGradient(
+      colors: [
+        selectedBackgroundColorBetween!,
+        selectedBackgroundColorBetween!,
+      ],
+      stops: const [
+        0,
+        1,
+      ],
+    );
     TextStyle txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyLarge)!.copyWith(
       color: backgroundColor != null
           ? backgroundColor!.computeLuminance() > .5
@@ -305,62 +316,65 @@ class DaysWidget extends StatelessWidget {
     }
 
     return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: borderRadius,
+        gradient: getGradient(values, gradientLeft, gradientRight, gradientFull),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: borderRadius, gradient: getGradient(values, gradientLeft, gradientRight, gradientFull)),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            if (values.isSelected &&
-                (values.isFirstDayOfWeek ||
-                    values.isLastDayOfWeek ||
-                    values.day.isSameDay(values.isFirstDayOfMonth) ||
-                    values.day.isSameDay(values.isLastDayOfMonth)))
-              Container(
-                alignment: Alignment.center,
-                width: 46,
-                decoration: BoxDecoration(
-                  color: selectedBackgroundColorBetween,
-                  borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
-                ),
-              ),
-            if (values.isSelected &&
-                    (values.selectedMinDate != null && values.day.isSameDay(values.selectedMinDate!)) ||
-                (values.selectedMaxDate != null && values.day.isSameDay(values.selectedMaxDate!)))
-              Container(
-                alignment: Alignment.center,
-                width: 46,
-                decoration: BoxDecoration(
-                  color: selectedBackgroundColor,
-                  borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
-                ),
-              ),
-            Center(
-              child: Stack(
-                children: [
-                  CustomPaint(
-                    painter: !values.day.isSameDay(values.minDate) && values.day.isBefore(values.minDate) ||
-                            values.day.isAfter(values.maxDate)
-                        ? DiagonalPainter(dayDisableColor ?? Theme.of(context).colorScheme.onSurface.withOpacity(.5))
-                        : null,
-                    child: Container(
-                      constraints: const BoxConstraints(
-                        minWidth: 14,
-                        minHeight: 14,
-                      ),
-                      child: Text(
-                        values.text,
-                        textAlign: TextAlign.center,
-                        style: txtStyle,
-                      ),
-                    ),
-                  ),
-                ],
+        children: [
+          if (values.isSelected &&
+              (values.isFirstDayOfWeek ||
+                  values.isLastDayOfWeek ||
+                  values.day.isSameDay(values.isFirstDayOfMonth) ||
+                  values.day.isSameDay(values.isLastDayOfMonth)))
+            Container(
+              alignment: Alignment.center,
+              width: 46,
+              decoration: BoxDecoration(
+                color: selectedBackgroundColorBetween,
+                borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
               ),
             ),
-            if (dayStackBuilder != null) ...dayStackBuilder!(context, values),
-          ],
-        ));
+          if (values.isSelected && (values.selectedMinDate != null && values.day.isSameDay(values.selectedMinDate!)) ||
+              (values.selectedMaxDate != null && values.day.isSameDay(values.selectedMaxDate!)))
+            Container(
+              alignment: Alignment.center,
+              width: 46,
+              decoration: BoxDecoration(
+                color: selectedBackgroundColor,
+                borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
+              ),
+            ),
+          Center(
+            child: Stack(
+              children: [
+                CustomPaint(
+                  painter: !values.day.isSameDay(values.minDate) && values.day.isBefore(values.minDate) ||
+                          values.day.isAfter(values.maxDate)
+                      ? DiagonalPainter(dayDisableColor ?? Theme.of(context).colorScheme.onSurface.withOpacity(.5))
+                      : null,
+                  child: Container(
+                    constraints: const BoxConstraints(
+                      minWidth: 14,
+                      minHeight: 14,
+                    ),
+                    child: Text(
+                      values.text,
+                      textAlign: TextAlign.center,
+                      style: txtStyle,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (dayStackBuilder != null) ...dayStackBuilder!(context, values),
+        ],
+      ),
+    );
   }
 
   Gradient? getGradient(DayValues values, gradientLeft, gradientRight, gradientFull) {

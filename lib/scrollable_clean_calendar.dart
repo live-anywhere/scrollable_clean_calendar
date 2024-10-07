@@ -98,6 +98,7 @@ class ScrollableCleanCalendar extends StatefulWidget {
   final CleanCalendarController calendarController;
 
   const ScrollableCleanCalendar({
+    super.key,
     this.locale = 'en',
     this.scrollController,
     this.showWeekdays = true,
@@ -230,9 +231,9 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
                   aspectRatio: widget.dayAspectRatio,
                 );
               },
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }
