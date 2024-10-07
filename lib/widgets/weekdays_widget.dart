@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
 import 'package:scrollable_clean_calendar/utils/extensions.dart';
@@ -11,6 +10,7 @@ class WeekdaysWidget extends StatelessWidget {
   final Layout? layout;
   final TextStyle? textStyle;
   final Widget Function(BuildContext context, String weekday)? weekdayBuilder;
+  final double? aspectRatio;
 
   const WeekdaysWidget({
     super.key,
@@ -20,6 +20,7 @@ class WeekdaysWidget extends StatelessWidget {
     required this.layout,
     required this.weekdayBuilder,
     required this.textStyle,
+    this.aspectRatio,
   });
 
   @override
@@ -29,6 +30,7 @@ class WeekdaysWidget extends StatelessWidget {
     return GridView.count(
       crossAxisCount: DateTime.daysPerWeek,
       shrinkWrap: true,
+      childAspectRatio: aspectRatio ?? 1.0,
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       children: List.generate(DateTime.daysPerWeek, (index) {
@@ -52,11 +54,7 @@ class WeekdaysWidget extends StatelessWidget {
         weekday.capitalize(),
         style: textStyle ??
             Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .color!
-                      .withOpacity(.4),
+                  color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(.4),
                   fontWeight: FontWeight.bold,
                 ),
       ),
@@ -69,11 +67,7 @@ class WeekdaysWidget extends StatelessWidget {
         weekday.capitalize(),
         style: textStyle ??
             Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .color!
-                      .withOpacity(.4),
+                  color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(.4),
                   fontWeight: FontWeight.bold,
                 ),
       ),
