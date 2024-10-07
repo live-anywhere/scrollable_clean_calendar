@@ -8,11 +8,32 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  final calendarController = CleanCalendarController(
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  DateTime? _selectedStartDate;
+  DateTime? _selectedEndDate;
+
+  final _today = DateTime.now();
+
+  late final calendarController = CleanCalendarController(
     minDate: DateTime.now(),
     maxDate: DateTime.now().add(const Duration(days: 365)),
-    onRangeSelected: (firstDate, secondDate) {},
+    initialDateSelected: _selectedStartDate,
+    endDateSelected: _selectedEndDate,
+    onRangeSelected: (startDate, endDate) {
+      setState(
+        () {
+          _selectedStartDate = startDate;
+          _selectedEndDate = endDate;
+        },
+      );
+    },
     onDayTapped: (date) {},
     onPreviousMinDateTapped: (date) {},
     onAfterMaxDateTapped: (date) {},
@@ -22,10 +43,6 @@ class MyApp extends StatelessWidget {
       debugPrint('onMinRangeSelected minRange $minRange');
     },
   );
-
-  final _today = DateTime.now();
-
-  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +103,45 @@ class MyApp extends StatelessWidget {
             dayStackBuilder: (context, values) => [
               if (values.day.isSameDay(_today) && !values.isSelected)
                 const Positioned(
-                  bottom: 6,
+                  bottom: 0,
                   child: Text(
                     '오늘',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              if (_selectedStartDate != null && values.day.isSameDay(_selectedStartDate!.add(Duration(days: 6))))
+                const Positioned(
+                  top: 0,
+                  child: Text(
+                    '일주일 살기',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              if (_selectedStartDate != null && values.day.isSameDay(_selectedStartDate!.add(Duration(days: 14))))
+                const Positioned(
+                  top: 0,
+                  child: Text(
+                    '보름 살기',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              if (_selectedStartDate != null && values.day.isSameDay(_selectedStartDate!.add(Duration(days: 29))))
+                const Positioned(
+                  top: 0,
+                  child: Text(
+                    '보름 살기',
                     style: TextStyle(
                       color: Color(0xFFFF9D4D),
                       fontWeight: FontWeight.w500,
