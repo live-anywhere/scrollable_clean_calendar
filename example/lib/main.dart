@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
+import 'package:scrollable_clean_calendar/utils/extensions.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,18 +10,19 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final calendarController = CleanCalendarController(
-    minDate: DateTime.now(),
-    maxDate: DateTime.now().add(const Duration(days: 365)),
-    onRangeSelected: (firstDate, secondDate) {},
-    onDayTapped: (date) {},
-    onPreviousMinDateTapped: (date) {},
-    onAfterMaxDateTapped: (date) {},
-    weekdayStart: DateTime.sunday,
-    minRange: 6,
-    onMinRangeSelected: (minRange) {
-      print('onMinRangeSelected minRange $minRange');
-    }
-  );
+      minDate: DateTime.now(),
+      maxDate: DateTime.now().add(const Duration(days: 365)),
+      onRangeSelected: (firstDate, secondDate) {},
+      onDayTapped: (date) {},
+      onPreviousMinDateTapped: (date) {},
+      onAfterMaxDateTapped: (date) {},
+      weekdayStart: DateTime.sunday,
+      minRange: 6,
+      onMinRangeSelected: (minRange) {
+        print('onMinRangeSelected minRange $minRange');
+      });
+
+  final _today = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +75,25 @@ class MyApp extends StatelessWidget {
             ),
             dayTextStyle: const TextStyle(
               color: Colors.black,
-              fontWeight: FontWeight.w400,
               fontSize: 14,
             ),
             daySelectedBackgroundColor: const Color(0xFF4765FF),
             daySelectedBackgroundColorBetween: const Color(0xFFF6F6F6),
             dayRadius: 46,
+            dayStackBuilder: (context, values) => [
+              if (values.day.isSameDay(_today) && !values.isSelected)
+                const Positioned(
+                  bottom: 6,
+                  child: Text(
+                    '오늘',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                )
+            ],
             todayColor: const Color(0xFFFF9D4D),
             dayDisableColor: const Color(0xFFDDDDDD),
           ),

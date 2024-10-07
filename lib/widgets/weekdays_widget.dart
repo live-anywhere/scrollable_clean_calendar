@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
+import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
 import 'package:scrollable_clean_calendar/utils/extensions.dart';
 
@@ -9,7 +10,7 @@ class WeekdaysWidget extends StatelessWidget {
   final String locale;
   final Layout? layout;
   final TextStyle? textStyle;
-  final Widget Function(BuildContext context, String weekday)? weekdayBuilder;
+  final WeekdayBuilder? weekdayBuilder;
   final double? aspectRatio;
 
   const WeekdaysWidget({

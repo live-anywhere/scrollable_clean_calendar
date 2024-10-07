@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:scrollable_clean_calendar/models/day_values_model.dart';
+import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
 import 'package:scrollable_clean_calendar/utils/extensions.dart';
 
@@ -10,10 +11,8 @@ class DaysWidget extends StatelessWidget {
   final double calendarCrossAxisSpacing;
   final double calendarMainAxisSpacing;
   final Layout? layout;
-  final Widget Function(
-    BuildContext context,
-    DayValues values,
-  )? dayBuilder;
+  final DayBuilder? dayBuilder;
+  final DayStackBuilder? dayStackBuilder;
   final Color? todayColor;
   final Color? selectedBackgroundColor;
   final Color? backgroundColor;
@@ -32,6 +31,7 @@ class DaysWidget extends StatelessWidget {
     required this.calendarMainAxisSpacing,
     required this.layout,
     required this.dayBuilder,
+    required this.dayStackBuilder,
     required this.todayColor,
     required this.selectedBackgroundColor,
     required this.backgroundColor,
@@ -311,29 +311,30 @@ class DaysWidget extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            values.isSelected &&
-                    (values.isFirstDayOfWeek ||
-                        values.isLastDayOfWeek ||
-                        values.day.isSameDay(values.isFirstDayOfMonth) ||
-                        values.day.isSameDay(values.isLastDayOfMonth))
-                ? Container(
-                    alignment: Alignment.center,
-                    width: 46,
-                    decoration: BoxDecoration(
-                      color: selectedBackgroundColorBetween,
-                      borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
-                    ))
-                : const SizedBox.shrink(),
-            values.isSelected && (values.selectedMinDate != null && values.day.isSameDay(values.selectedMinDate!)) ||
-                    (values.selectedMaxDate != null && values.day.isSameDay(values.selectedMaxDate!))
-                ? Container(
-                    alignment: Alignment.center,
-                    width: 46,
-                    decoration: BoxDecoration(
-                      color: selectedBackgroundColor,
-                      borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
-                    ))
-                : const SizedBox.shrink(),
+            if (values.isSelected &&
+                (values.isFirstDayOfWeek ||
+                    values.isLastDayOfWeek ||
+                    values.day.isSameDay(values.isFirstDayOfMonth) ||
+                    values.day.isSameDay(values.isLastDayOfMonth)))
+              Container(
+                alignment: Alignment.center,
+                width: 46,
+                decoration: BoxDecoration(
+                  color: selectedBackgroundColorBetween,
+                  borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
+                ),
+              ),
+            if (values.isSelected &&
+                    (values.selectedMinDate != null && values.day.isSameDay(values.selectedMinDate!)) ||
+                (values.selectedMaxDate != null && values.day.isSameDay(values.selectedMaxDate!)))
+              Container(
+                alignment: Alignment.center,
+                width: 46,
+                decoration: BoxDecoration(
+                  color: selectedBackgroundColor,
+                  borderRadius: borderRadius = BorderRadius.all(Radius.circular(radius)),
+                ),
+              ),
             Center(
               child: Stack(
                 children: [
@@ -357,14 +358,7 @@ class DaysWidget extends StatelessWidget {
                 ],
               ),
             ),
-            values.day.isSameDay(today) && !values.isSelected
-                ? Positioned(
-                    bottom: 6,
-                    child: Text(
-                      '오늘',
-                      style: txtStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w500),
-                    ))
-                : const SizedBox.shrink()
+            if (dayStackBuilder != null) ...dayStackBuilder!(context, values),
           ],
         ));
   }
