@@ -64,7 +64,7 @@ class CleanCalendarController extends ChangeNotifier {
     this.weekdayStart = DateTime.monday,
     this.initialFocusDate,
     this.minRange = 0,
-    this.onMinRangeSelected
+    this.onMinRangeSelected,
   })  : assert(weekdayStart <= DateTime.sunday),
         assert(weekdayStart >= DateTime.monday) {
     final x = weekdayStart - 1;
@@ -73,21 +73,17 @@ class CleanCalendarController extends ChangeNotifier {
     DateTime currentDate = DateTime(minDate.year, minDate.month);
     months.add(currentDate);
 
-    while (!(currentDate.year == maxDate.year &&
-        currentDate.month == maxDate.month)) {
+    while (!(currentDate.year == maxDate.year && currentDate.month == maxDate.month)) {
       currentDate = DateTime(currentDate.year, currentDate.month + 1);
       months.add(currentDate);
     }
 
     if (initialDateSelected != null &&
-        (initialDateSelected!.isAfter(minDate) ||
-            initialDateSelected!.isSameDay(minDate))) {
+        (initialDateSelected!.isAfter(minDate) || initialDateSelected!.isSameDay(minDate))) {
       onDayClick(initialDateSelected!, update: false);
     }
 
-    if (endDateSelected != null &&
-        (endDateSelected!.isBefore(maxDate) ||
-            endDateSelected!.isSameDay(maxDate))) {
+    if (endDateSelected != null && (endDateSelected!.isBefore(maxDate) || endDateSelected!.isSameDay(maxDate))) {
       onDayClick(endDateSelected!, update: false);
     }
   }
@@ -109,7 +105,7 @@ class CleanCalendarController extends ChangeNotifier {
       dateFormat.format(today.add(const Duration(days: 3))),
       dateFormat.format(today.add(const Duration(days: 4))),
       dateFormat.format(today.add(const Duration(days: 5))),
-      dateFormat.format(today.add(const Duration(days: 6)))
+      dateFormat.format(today.add(const Duration(days: 6))),
     ];
 
     return daysOfWeek;
@@ -139,15 +135,14 @@ class CleanCalendarController extends ChangeNotifier {
       }
 
       if (onRangeSelected != null) {
-        if(rangeMaxDate != null && rangeMaxDate!.difference(rangeMinDate!).inDays < minRange!.toInt()) {
+        if (rangeMaxDate != null && rangeMaxDate!.difference(rangeMinDate!).inDays < minRange!.toInt()) {
           rangeMaxDate = null;
-          if(minRange != null) {
+          if (minRange != null) {
             onMinRangeSelected!(minRange!);
             clearSelectedDates();
           }
         }
         onRangeSelected!(rangeMinDate, rangeMaxDate);
-
       }
     }
   }
@@ -193,14 +188,14 @@ class CleanCalendarController extends ChangeNotifier {
         (date.year < maxDate.year || date.month <= maxDate.month))) {
       return;
     }
-    final month =
-        ((date.year - minDate.year) * 12) - minDate.month + date.month;
+    final month = ((date.year - minDate.year) * 12) - minDate.month + date.month;
     await itemScrollController.scrollTo(
-        index: month,
-        alignment: alignment,
-        duration: duration,
-        curve: curve,
-        opacityAnimationWeights: opacityAnimationWeights);
+      index: month,
+      alignment: alignment,
+      duration: duration,
+      curve: curve,
+      opacityAnimationWeights: opacityAnimationWeights,
+    );
   }
 
   /// Jump to [date.month].
@@ -228,8 +223,7 @@ class CleanCalendarController extends ChangeNotifier {
         (date.year < maxDate.year || date.month <= maxDate.month))) {
       return;
     }
-    final month =
-        ((date.year - minDate.year) * 12) - minDate.month + date.month;
+    final month = ((date.year - minDate.year) * 12) - minDate.month + date.month;
     itemScrollController.jumpTo(index: month, alignment: alignment);
   }
 }

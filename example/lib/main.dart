@@ -2,24 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
+import 'package:scrollable_clean_calendar/utils/extensions.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  final calendarController = CleanCalendarController(
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  DateTime? _selectedStartDate;
+  DateTime? _selectedEndDate;
+
+  final _today = DateTime.now();
+
+  late final calendarController = CleanCalendarController(
     minDate: DateTime.now(),
     maxDate: DateTime.now().add(const Duration(days: 365)),
-    onRangeSelected: (firstDate, secondDate) {},
+    initialDateSelected: _selectedStartDate,
+    endDateSelected: _selectedEndDate,
+    onRangeSelected: (startDate, endDate) {
+      setState(
+        () {
+          _selectedStartDate = startDate;
+          _selectedEndDate = endDate;
+        },
+      );
+    },
     onDayTapped: (date) {},
     onPreviousMinDateTapped: (date) {},
     onAfterMaxDateTapped: (date) {},
     weekdayStart: DateTime.sunday,
     minRange: 6,
     onMinRangeSelected: (minRange) {
-      print('onMinRangeSelected minRange $minRange');
-    }
+      debugPrint('onMinRangeSelected minRange $minRange');
+    },
   );
 
   @override
@@ -50,7 +72,7 @@ class MyApp extends StatelessWidget {
                 calendarController.clearSelectedDates();
               },
               icon: const Icon(Icons.clear),
-            )
+            ),
           ],
         ),
         body: Padding(
@@ -73,12 +95,61 @@ class MyApp extends StatelessWidget {
             ),
             dayTextStyle: const TextStyle(
               color: Colors.black,
-              fontWeight: FontWeight.w400,
               fontSize: 14,
             ),
             daySelectedBackgroundColor: const Color(0xFF4765FF),
             daySelectedBackgroundColorBetween: const Color(0xFFF6F6F6),
             dayRadius: 46,
+            dayStackBuilder: (context, values) => [
+              if (values.day.isSameDay(_today) && !values.isSelected)
+                const Positioned(
+                  bottom: 0,
+                  child: Text(
+                    '오늘',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              if (_selectedStartDate != null && values.day.isSameDay(_selectedStartDate!.add(Duration(days: 6))))
+                const Positioned(
+                  top: 0,
+                  child: Text(
+                    '일주일 살기',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              if (_selectedStartDate != null && values.day.isSameDay(_selectedStartDate!.add(Duration(days: 14))))
+                const Positioned(
+                  top: 0,
+                  child: Text(
+                    '보름 살기',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              if (_selectedStartDate != null && values.day.isSameDay(_selectedStartDate!.add(Duration(days: 29))))
+                const Positioned(
+                  top: 0,
+                  child: Text(
+                    '보름 살기',
+                    style: TextStyle(
+                      color: Color(0xFFFF9D4D),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+            ],
             todayColor: const Color(0xFFFF9D4D),
             dayDisableColor: const Color(0xFFDDDDDD),
           ),
