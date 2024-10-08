@@ -299,8 +299,7 @@ class DaysWidget extends StatelessWidget {
         }
       } else {
         txtStyle = (textStyle ?? Theme.of(context).textTheme.bodyLarge)!.copyWith(
-          color: selectedBackgroundColor ?? Theme.of(context).colorScheme.primary,
-          fontWeight: values.isFirstDayOfWeek || values.isLastDayOfWeek ? FontWeight.bold : null,
+          color: _setWeekendColor(values.day),
         );
       }
     } else if (values.day.isSameDay(values.minDate)) {
