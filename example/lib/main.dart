@@ -1,19 +1,11 @@
-import 'package:example/calendar_tag_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
-import 'package:scrollable_clean_calendar/utils/extensions.dart';
 
 void main() {
   runApp(MyApp());
 }
-
-final _calendarTags = <({int days, String title})>[
-  (days: 6, title: '일주일'),
-  (days: 14, title: '보름'),
-  (days: 29, title: '한달'),
-];
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -25,8 +17,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   DateTime? _selectedStartDate;
   DateTime? _selectedEndDate;
-
-  final _today = DateTime.now();
 
   late final calendarController = CleanCalendarController(
     minDate: DateTime.now(),
@@ -107,36 +97,6 @@ class _MyAppState extends State<MyApp> {
             daySelectedBackgroundColor: const Color(0xFF4765FF),
             daySelectedBackgroundColorBetween: const Color(0xFFF6F6F6),
             dayRadius: 46,
-            dayStackBuilder: (context, values) => [
-              if (values.day.isSameDay(_today) && !values.isSelected)
-                const Positioned(
-                  bottom: 6,
-                  child: Text(
-                    '오늘',
-                    style: TextStyle(
-                      color: Color(0xFFFF9D4D),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              if (_selectedStartDate != null)
-                for (final tag in _calendarTags)
-                  if (values.day.isSameDay(_selectedStartDate!.add(Duration(days: tag.days))))
-                    Positioned(
-                      top: -10,
-                      child: CustomPaint(
-                        painter: CalendarTagPainter(
-                          text: '${tag.title} 살기',
-                          textStyle: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: primary,
-                          ),
-                        ),
-                      ),
-                    ),
-            ],
             todayColor: const Color(0xFFFF9D4D),
             dayDisableColor: const Color(0xFFDDDDDD),
           ),

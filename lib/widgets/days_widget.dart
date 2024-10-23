@@ -12,7 +12,6 @@ class DaysWidget extends StatelessWidget {
   final double calendarMainAxisSpacing;
   final Layout? layout;
   final DayBuilder? dayBuilder;
-  final DayStackBuilder? dayStackBuilder;
   final Color? todayColor;
   final Color? selectedBackgroundColor;
   final Color? backgroundColor;
@@ -31,7 +30,6 @@ class DaysWidget extends StatelessWidget {
     required this.calendarMainAxisSpacing,
     required this.layout,
     required this.dayBuilder,
-    required this.dayStackBuilder,
     required this.todayColor,
     required this.selectedBackgroundColor,
     required this.backgroundColor,
@@ -348,29 +346,24 @@ class DaysWidget extends StatelessWidget {
               ),
             ),
           Center(
-            child: Stack(
-              children: [
-                CustomPaint(
-                  painter: !values.day.isSameDay(values.minDate) && values.day.isBefore(values.minDate) ||
-                          values.day.isAfter(values.maxDate)
-                      ? DiagonalPainter(dayDisableColor ?? Theme.of(context).colorScheme.onSurface.withOpacity(.5))
-                      : null,
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minWidth: 14,
-                      minHeight: 14,
-                    ),
-                    child: Text(
-                      values.text,
-                      textAlign: TextAlign.center,
-                      style: txtStyle,
-                    ),
-                  ),
+            child: CustomPaint(
+              painter: !values.day.isSameDay(values.minDate) && values.day.isBefore(values.minDate) ||
+                      values.day.isAfter(values.maxDate)
+                  ? DiagonalPainter(dayDisableColor ?? Theme.of(context).colorScheme.onSurface.withOpacity(.5))
+                  : null,
+              child: Container(
+                constraints: const BoxConstraints(
+                  minWidth: 14,
+                  minHeight: 14,
                 ),
-              ],
+                child: Text(
+                  values.text,
+                  textAlign: TextAlign.center,
+                  style: txtStyle,
+                ),
+              ),
             ),
           ),
-          if (dayStackBuilder != null) ...dayStackBuilder!(context, values),
         ],
       ),
     );

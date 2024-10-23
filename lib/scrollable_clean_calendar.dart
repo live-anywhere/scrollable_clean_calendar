@@ -1,4 +1,4 @@
-library scrollable_clean_calendar;
+library;
 
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -13,7 +13,6 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 typedef MonthBuilder = Widget Function(BuildContext context, String month);
 typedef WeekdayBuilder = Widget Function(BuildContext context, String weekday);
 typedef DayBuilder = Widget Function(BuildContext context, DayValues values);
-typedef DayStackBuilder = List<Widget> Function(BuildContext context, DayValues values);
 
 class ScrollableCleanCalendar extends StatefulWidget {
   /// The language locale
@@ -91,9 +90,6 @@ class ScrollableCleanCalendar extends StatefulWidget {
   /// A builder to make a customized day of calendar
   final DayBuilder? dayBuilder;
 
-  /// A builder to make a customized day of calendar (Stack)
-  final DayStackBuilder? dayStackBuilder;
-
   /// The controller of ScrollableCleanCalendar
   final CleanCalendarController calendarController;
 
@@ -111,7 +107,6 @@ class ScrollableCleanCalendar extends StatefulWidget {
     this.monthBuilder,
     this.weekdayBuilder,
     this.dayBuilder,
-    this.dayStackBuilder,
     this.monthTextAlign,
     this.monthTextStyle,
     this.weekdayTextStyle,
@@ -219,7 +214,6 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
                   calendarMainAxisSpacing: widget.calendarMainAxisSpacing,
                   layout: widget.layout,
                   dayBuilder: widget.dayBuilder,
-                  dayStackBuilder: widget.dayStackBuilder,
                   todayColor: widget.todayColor,
                   backgroundColor: widget.dayBackgroundColor,
                   selectedBackgroundColor: widget.daySelectedBackgroundColor,
